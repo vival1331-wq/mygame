@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เกมคลิกท้าทายความเร็ว!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1a1a1a;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        #game-container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        #score-text {
+            font-size: 24px;
+            color: #ffbc00;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #ff6b81;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* หน้าต่าง Jumpscare เต็มจอ (ซ่อนไว้เริ่มต้น) */
+        #jumpscare-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: none; /* ซ่อนหน้าจอไว้ */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* สไตล์รูปภาพจัมสแกร์พร้อมเอฟเฟกต์สั่น */
+        #jumpscare-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            animation: shake 0.1s infinite; /* สั่งให้รูปสั่นรัวๆ */
+        }
+
+        /* เอฟเฟกต์ภาพสั่นสไตล์จัมสแกร์ */
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <h1>ลองคลิกปุ่มให้ถึง 5 คะแนนดูสิ! 🎯</h1>
+        <h2 id="score-text">คะแนนปัจจุบัน: 0</h2>
+        <button id="click-btn">คลิกตรงนี้!</button>
+    </div>
+
+    <div id="jumpscare-overlay">
+        <img id="jumpscare-image" src="https://i.postimg.cc/CxRcvD2X/9de36e2f4e1393cf99d7fa2d6d2a7c54.jpg"  alt="jjj.jpg">
+    </div>
+
+    <script>
+        let score = 0;
+        const targetScore = 5; // จำนวนคลิกที่จะเจอจัมสแกร์ (เปลี่ยนเลขตามใจชอบได้เลย)
+        
+        const clickBtn = document.getElementById('click-btn');
+        const scoreText = document.getElementById('score-text');
+        const jumpscareOverlay = document.getElementById('jumpscare-overlay');
+
+        clickBtn.addEventListener('click', () => {
+            score++;
+            scoreText.textContent = `คะแนนปัจจุบัน: ${score}`;
+
+            // เมื่อคะแนนถึงเป้าหมาย ให้แสดงจัมสแกร์
+            if (score >= targetScore) {
+                triggerJumpscare();
+            }
+        });
+
+        function triggerJumpscare() {
+            // แสดงหน้าต่างจัมสแกร์เต็มจอ
+            jumpscareOverlay.style.display = 'flex';
+
+            // ตั้งเวลาให้หน้าต่างจัมสแกร์หายไปหลังจาก 3 วินาที (3000 มิลลิวินาที) และรีเซ็ตเกม
+            setTimeout(() => {
+                jumpscareOverlay.style.display = 'none';
+                score = 0;
+                scoreText.textContent = `คะแนนปัจจุบัน: ${score}`;
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
